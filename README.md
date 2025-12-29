@@ -120,5 +120,5 @@ These links below are materials which helped me a lot when bulding my project:
 + https://github.com/ZeekiChen/iWatch-v2.0
 + https://github.com/lvgl/lvgl
 + https://github.com/Sheep118/WouoUI-PageVersion
-+ https://github.com/epcbtech/ak-base-kit-stm32l151
++ https://github.com/ak-embedded-software/ak-base-kit-stm32l151
 + https://github.com/FreeRTOS/FreeRTOS-Kernel
