@@ -76,7 +76,7 @@ This project uses a mini RTOS (AK-mOS) which written by me for AK-base-kit (ARM 
 
 The kit you can check out here:
 
-https://github.com/epcbtech/ak-base-kit-stm32l151
+https://github.com/ak-embedded-software/ak-base-kit-stm32l151
 
 The mini RTOS has following features:
 + Preemptive scheduling
