@@ -71,27 +71,16 @@ https://www.youtube.com/watch?v=F7zo0RkRJ88
   src="assets/program_layer.png">
 </figure>
 
-## AK-mOS
-This project uses a mini RTOS (AK-mOS) which written by me for AK-base-kit (ARM cortex M3). 
+## AKOS
+This project uses AKOS from the AK Foundation:
 
-The kit you can check out here:
+https://github.com/the-ak-foundation/akos
 
-https://github.com/ak-embedded-software/ak-base-kit-stm32l151
-
-The mini RTOS has following features:
+AKOS provides:
 + Preemptive scheduling
 + Round-robin scheduling
-+ Inner tasks communiation
-+ Software timer
-
-
-More detail about it: 
-
-https://github.com/snoopy3921/AK-mOS---The-simple-RTOS-on-AK-base-kit
-
-This mini RTOS was created for learning purpose with context switch based on freeRTOS.
-
-Im hoping this OS can be used more to test stability.
++ Thread messaging
++ Software timers
 
 ## Oled GUI
 To control oled display with rich animating. I wrote the library to increase experience on UI.

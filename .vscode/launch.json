@@ -7,7 +7,7 @@
         {
             "name": "Cortex Debug",
             "cwd": "${workspaceFolder}",
-            "executable": "./build_OLED_WATCH/OLED_WATCH.axf",
+            "executable": "./application/build_OLED_WATCH/OLED_WATCH.axf",
             "configFiles": [
                 "/usr/local/share/openocd/scripts/interface/stlink.cfg",
                 "/usr/local/share/openocd/scripts/target/stm32f1x.cfg"

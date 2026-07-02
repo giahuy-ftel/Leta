@@ -1,0 +1,32 @@
+# Firmware build outputs
+build_*/
+**/build_*/
+
+# Tool build outputs
+tools/**/build_*/
+tools/toolchain/
+
+# Submodules managed outside this repo index
+application/sources/tinyusb/
+bootloader/sources/tinyusb/
+
+# Compiler and linker artifacts
+*.o
+*.d
+*.su
+*.map
+*.axf
+*.elf
+*.hex
+*.asm
+*.sym
+
+# Local analysis/cache outputs
+.PVS-Studio/
+**/.PVS-Studio/
+
+# Editor and OS noise
+*.swp
+*.swo
+*~
+.DS_Store

@@ -1,0 +1,6 @@
+CFLAGS		+= -I./$(APP_SOURCES_DIR)/driver/sh1106
+CPPFLAGS	+= -I./$(APP_SOURCES_DIR)/driver/sh1106
+
+VPATH += $(APP_SOURCES_DIR)/driver/sh1106
+SOURCES_CPP += $(APP_SOURCES_DIR)/driver/sh1106/sh1106.cpp
+
