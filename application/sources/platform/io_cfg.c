@@ -367,8 +367,14 @@ void i2c_hw_read_multi(uint8_t address, uint8_t reg, uint8_t* data, uint16_t cou
 
 void adc_hw_init(void)
 {
+	GPIO_InitTypeDef GPIO_InitStructure;
+
 	RCC_ADCCLKConfig (RCC_PCLK2_Div6);
-	RCC_APB2PeriphClockCmd(	RCC_APB2Periph_ADC1	, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_ADC1, ENABLE);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
 	ADC_InitTypeDef ADC_InitStruct;
 	ADC_InitStruct.ADC_Mode = ADC_Mode_Independent;
@@ -391,27 +397,36 @@ void adc_hw_init(void)
 	
 }
 
-float adc_get_bat_voltage(void)
+static uint16_t adc_read_channel(uint8_t channel)
 {
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_9 , 1, ADC_SampleTime_239Cycles5);
+	ADC_RegularChannelConfig(ADC1, channel, 1, ADC_SampleTime_239Cycles5);
 	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 	while (!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
-	
-	return (float)ADC_GetConversionValue(ADC1)*3.3*2 / 0xfff;
+	(void)ADC_GetConversionValue(ADC1);
+
+	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+	while (!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
+
+	return ADC_GetConversionValue(ADC1);
+}
+
+float adc_get_bat_voltage(void)
+{
+	uint32_t adc_sum = 0;
+
+	for (uint8_t i = 0; i < 8; i++) {
+		adc_sum += adc_read_channel(ADC_Channel_9);
+	}
+
+	return (float)adc_sum * 3.3f * 2.0f / (4095.0f * 8.0f);
 }
 float adc_get_temp(void)
 {
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_TempSensor, 1, ADC_SampleTime_239Cycles5); // define regular conversion config
-
-	// start conversion
-	ADC_SoftwareStartConvCmd(ADC1, ENABLE);	// start conversion (will be endless as we are in continuous mode)
-	while (!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
-
 	uint16_t adc_value;
 	float temperature;
 #define V25 (uint16_t)(1750) // when V25=1.41V at ref 3.3V
 #define Avg_Slope (uint16_t)(5)  //when avg_slope=4.3mV/C at ref 3.3V
-	adc_value = ADC_GetConversionValue(ADC1);
+	adc_value = adc_read_channel(ADC_Channel_TempSensor);
 	temperature = ((float)(V25-adc_value)/(float)Avg_Slope+25);
 	return temperature;
 }

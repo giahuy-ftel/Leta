@@ -13,10 +13,6 @@ extern "C" {
 #define CFG_TUSB_OS OPT_OS_NONE
 #endif
 
-#ifndef CFG_TUSB_DEBUG
-#define CFG_TUSB_DEBUG 0
-#endif
-
 #define CFG_TUD_ENABLED 1
 #define CFG_TUH_ENABLED 0
 #define CFG_TUD_MAX_SPEED OPT_MODE_FULL_SPEED

@@ -60,6 +60,10 @@ ak_timer_t *p_timer_update_watch_time;
 ak_timer_t *p_timer_reload_watchdog;
 ak_timer_t *p_timer_countdown_screen_time;
 
+static const float BATTERY_SHUTDOWN_VOLTAGE = 3.35f;
+static const uint8_t BATTERY_LOW_SAMPLE_COUNT = 6;
+static uint8_t battery_low_count;
+
 static void update_watch_time(void)
 {
     watch_time_now = watch_time.getDateTime();
@@ -70,8 +74,17 @@ static void reload_watchdog(void)
     watchdog_hw_reload();
     watch_temp = adc_get_temp();
     bat_voltage = adc_get_bat_voltage();
-    if(bat_voltage < (float)3.35) power_pin_off();
-    
+    if(bat_voltage < BATTERY_SHUTDOWN_VOLTAGE) {
+        if(battery_low_count < BATTERY_LOW_SAMPLE_COUNT) {
+            battery_low_count++;
+        }
+        if(battery_low_count >= BATTERY_LOW_SAMPLE_COUNT) {
+            power_pin_off();
+        }
+    }
+    else {
+        battery_low_count = 0;
+    }
 }
 
 void countdown_screen_time(void)
@@ -127,7 +140,7 @@ int main()
     i2c_hw_init();
     watchdog_hw_init();
 
-    MPU6050_Init();
+    // MPU6050_Init();
 
     watch_time.init();
 
@@ -137,7 +150,7 @@ int main()
     gui_initialize();
 
     bat_voltage = adc_get_bat_voltage();    
-    if( bat_voltage < (float)3.35 )
+    if( bat_voltage < BATTERY_SHUTDOWN_VOLTAGE )
     {
         gui_clear_buff();
         gui_window_draw_bmp(&window_screen_size, 40, 10, 50, 50, low_batt, DRAW_STATE_ON);

@@ -7,6 +7,69 @@
   <figcaption align=center>Oled wrist watch using Stm32f1 with mini RTOS and Monochrome GUI</figcaption>
 </figure>
 
+# Build And Flash
+
+Leta now uses a USB DFU bootloader. The application is linked at `0x08007000`; the bootloader lives at `0x08000000`.
+
+## Requirements
+
++ ARM GCC toolchain: `arm-none-eabi-gcc`
++ `dfu-util` for USB DFU flashing
++ ST-Link tools or OpenOCD for first-time bootloader flashing
+
+The repo can also use the bundled toolchain under `tools/toolchain/` when present.
+
+## Build
+
+```sh
+make app
+make bootloader
+```
+
+Useful top-level targets:
+
+```sh
+make help
+```
+
+## First-Time Programming
+
+Flash the bootloader with ST-Link:
+
+```sh
+make flash-bootloader-stlink
+```
+
+After the bootloader is installed, enter USB DFU by holding the top-right button, `TR` / `PA15`, while resetting or powering on the watch.
+
+## Flash App Over USB DFU
+
+With the watch in DFU mode:
+
+```sh
+make flash-app-dfu
+```
+
+This builds the app, packs it into the Leta DFU container, and runs `dfu-util`.
+
+## Flash App With ST-Link
+
+For direct app flashing without DFU:
+
+```sh
+make flash-app-stlink
+```
+
+## Memory Map
+
+```text
+0x08000000 - 0x08005FFF  bootloader
+0x08006000 - 0x08006FFF  shared boot state
+0x08007000 - 0x0801FFFF  application
+```
+
+Normal boot jumps straight to the app. The 1 second wait only happens after a successful DFU download so `dfu-util` can read the final status before the bootloader jumps to the app.
+
 
 # Demo
 <div align="center">

@@ -1,0 +1,2 @@
+# Leta USB DFU bootloader
+SUBSYSTEM=="usb", ATTR{idVendor}=="0309", ATTR{idProduct}=="2001", MODE="0666", GROUP="plugdev"

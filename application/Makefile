@@ -54,15 +54,19 @@ OBJECTS			:= $(OBJECTS:.s=.o)
 #|   -Os      | code size                        |              |   (--)  |            |    (++)     |
 #|  -Ofast    | O3 with none math cals           |     (---)    |         |     (+)    |    (+++)    |
 #|------------|----------------------------------|--------------|---------|------------|-------------|
-# NOTE: For debugging, -g option is mandatory.
-OPTIMIZE_OPTION = -Og -g
+OPTIMIZE_OPTION ?= -Os
 
 TOOLS_DIR		?= $(REPO_ROOT)/tools
+LOCAL_GCC_PATH		:= $(TOOLS_DIR)/toolchain/gcc-arm-none-eabi-10.3-2021.10
+ifneq ($(wildcard $(LOCAL_GCC_PATH)/bin/arm-none-eabi-gcc),)
+GCC_PATH		?= $(LOCAL_GCC_PATH)
+else
 GCC_TOOL		:= $(shell command -v arm-none-eabi-gcc 2>/dev/null)
 ifeq ($(strip $(GCC_TOOL)),)
-GCC_PATH		?= $(TOOLS_DIR)/toolchain/gcc-arm-none-eabi-10.3-2021.10
+GCC_PATH		?= $(LOCAL_GCC_PATH)
 else
 GCC_PATH		?= $(patsubst %/bin/arm-none-eabi-gcc,%,$(GCC_TOOL))
+endif
 endif
 
 OPENOCD_PATH	?= openocd

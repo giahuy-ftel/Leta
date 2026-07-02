@@ -10,7 +10,8 @@ enum {
 enum {
 	STRID_LANGID = 0,
 	STRID_MANUFACTURER,
-	STRID_PRODUCT
+	STRID_PRODUCT,
+	STRID_DFU_ALT
 };
 
 #define USB_VID 0x0309
@@ -38,13 +39,14 @@ static const tusb_desc_device_t desc_device = {
 
 static const uint8_t desc_configuration[] = {
 	TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN, 0x80, 100),
-	TUD_DFU_DESCRIPTOR(ITF_NUM_DFU, 1, STRID_PRODUCT, DFU_ATTRS, 1000, CFG_TUD_DFU_XFER_BUFSIZE),
+	TUD_DFU_DESCRIPTOR(ITF_NUM_DFU, 1, STRID_DFU_ALT, DFU_ATTRS, 1000, CFG_TUD_DFU_XFER_BUFSIZE),
 };
 
 static const char *string_desc_arr[] = {
-	(const char[]){0x09, 0x04},
+	NULL,
 	"Leta",
-	"USB DFU Bootloader"
+	"USB DFU Bootloader",
+	"Internal Flash"
 };
 
 static uint16_t desc_str[32 + 1];
@@ -66,7 +68,7 @@ const uint16_t *tud_descriptor_string_cb(uint8_t index, uint16_t langid)
 
 	size_t chr_count;
 	if (index == STRID_LANGID) {
-		memcpy(&desc_str[1], string_desc_arr[0], 2);
+		desc_str[1] = 0x0409;
 		chr_count = 1;
 	} else {
 		if (index >= (sizeof(string_desc_arr) / sizeof(string_desc_arr[0]))) {

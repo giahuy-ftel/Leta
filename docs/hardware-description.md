@@ -86,8 +86,8 @@ There are four user buttons. Firmware names come from `io_cfg.h`.
 | Schematic | Firmware name | MCU pin | Active level | Notes |
 | --- | --- | --- | --- | --- |
 | `Button 1` / `PA0_WKUP` | `BUTTON_RIGHT_DOWN` | `PA0` | High | Wake/power button path from `VBAT` through `D5` and `R23`; pulldown `R18 2k` |
-| `Button 2` / `SW2` | `BUTTON_LEFT_DOWN` | `PB15` | Low | Used by the bootloader to enter USB DFU |
-| `Button 3` / `SW3` | `BUTTON_RIGHT_UP` | `PA15` | Low | Pull-up configured in firmware |
+| `Button 2` / `SW2` | `BUTTON_LEFT_DOWN` | `PB15` | Low | Pull-up configured in firmware |
+| `Button 3` / `SW3` | `BUTTON_RIGHT_UP` | `PA15` | Low | Used by the bootloader to enter USB DFU |
 | `Button 4` / `SW4` | `BUTTON_LEFT_UP` | `PB4` | Low | Pull-up `R11 10k` shown on the schematic |
 
 ## Display
@@ -164,7 +164,7 @@ The bootloader must keep `3V3_EN` asserted on `PB0`; otherwise the AP2112K 3.3 V
 
 When the bootloader is left in USB DFU mode, it should release `3V3_EN` after its inactivity timeout so the device can shut down instead of staying awake indefinitely.
 
-The DFU entry button is `BUTTON_LEFT_DOWN`, which is schematic net `SW2` on `PB15`. This button is active low.
+The DFU entry button is `BUTTON_RIGHT_UP`, which is schematic net `SW3` on `PA15`. This button is active low.
 
 The application image is linked at `0x08007000`; the bootloader occupies the start of flash at `0x08000000`.
 

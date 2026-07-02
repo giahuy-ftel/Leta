@@ -12,7 +12,7 @@ extern "C"
 #define BUTTON_DRIVER_NG             (0x01)
 
 #define BUTTON_SHORT_PRESS_MIN_TIME  (20)
-#define BUTTON_LONG_PRESS_TIME       (1000)
+#define BUTTON_LONG_PRESS_TIME       (2000)
 
 #define BUTTON_DISABLE               (0x00)
 #define BUTTON_ENABLE                (0x01)

@@ -4,3 +4,4 @@ CPPFLAGS	+= -I./$(BOOTLOADER_SOURCES_DIR)/platform
 VPATH += $(BOOTLOADER_SOURCES_DIR)/platform
 
 SOURCES += $(BOOTLOADER_SOURCES_DIR)/platform/io_cfg.c
+SOURCES += $(BOOTLOADER_SOURCES_DIR)/platform/system.c
