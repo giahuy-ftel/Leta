@@ -2,6 +2,7 @@
 
 #include "gui.h"
 #include "gui_port.h"
+#include "app_usb_video.h"
 #include "math.h"
 #include "cmath"
 const uint8_t low_batt [] = {
@@ -33,7 +34,14 @@ void task_gui(void *p_arg)
 {   
     while (1)
     {
-        gui_run();
+        if (!app_usb_video_active())
+        {
+            gui_run();
+        }
+        else
+        {
+            akos_thread_delay(1);
+        }
     }
 }
 

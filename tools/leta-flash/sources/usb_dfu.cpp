@@ -32,6 +32,7 @@ bool usb_dfu_flash(const std::string &dfu_path)
 	command += LETA_USB_PID;
 	command += " -a 0 -D ";
 	command += shell_quote(dfu_path);
+	command += " -R";
 
 	APP_DBG(DEBUG_LEVEL_INFO, "%s\n", command.c_str());
 

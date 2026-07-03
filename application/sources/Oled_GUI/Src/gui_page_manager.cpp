@@ -19,7 +19,7 @@ reg_func_ptr reg_list[PAGE_EOP_ID] =
     page_mpu_reg,
     page_compass_reg,
     page_runner_game_reg,
-    page_boids_reg,
+    page_usb_video_reg,
 };
 
 /*****************************************************************************/

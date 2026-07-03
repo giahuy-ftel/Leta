@@ -61,7 +61,7 @@ pack: $(OBJ_DIR)/$(MODULE)
 flash: $(OBJ_DIR)/$(MODULE)
 	@$(OBJ_DIR)/$(MODULE) flash $(FW_PATH) $(DFU_PATH)
 
-install: usb-rules
+install: $(OBJ_DIR)/$(MODULE) usb-rules
 	@echo "Installing $(MODULE) to /usr/local/bin/..."
 	@cp $(OBJ_DIR)/$(MODULE) /usr/local/bin/
 

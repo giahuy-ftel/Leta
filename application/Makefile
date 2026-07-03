@@ -28,6 +28,7 @@ include $(APP_SOURCES_DIR)/platform/Makefile
 include $(APP_SOURCES_DIR)/AKOS/Makefile
 include $(APP_SOURCES_DIR)/driver/Makefile
 include $(APP_SOURCES_DIR)/Oled_GUI/Makefile
+include $(APP_SOURCES_DIR)/tinyusb/Makefile
 include $(APP_SOURCES_DIR)/application/Makefile
 
 SOURCES_ 		= $(notdir $(SOURCES))
@@ -108,6 +109,7 @@ GENERAL_FLAGS +=			\
 			$(VECT_TAB_OPTION)	\
 			-DUSE_STDPERIPH_DRIVER	\
 			-DSTM32F10X_MD		\
+			-DSTM32F103xB		\
 			-DSTM32F1
 
 AFLAGS +=	$(CPU)	\
@@ -123,7 +125,7 @@ COMPILER_FLAGS +=			\
 		-MD			\
 		-Wall
 
-CFLAGS += $(COMPILER_FLAGS) $(GENERAL_FLAGS) -std=c99
+CFLAGS += $(COMPILER_FLAGS) $(GENERAL_FLAGS) -std=gnu99
 
 CPPFLAGS +=					\
 		$(COMPILER_FLAGS)	\

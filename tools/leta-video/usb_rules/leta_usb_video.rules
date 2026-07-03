@@ -1,0 +1,2 @@
+# Leta USB Video HID interface
+KERNEL=="hidraw*", ATTRS{idVendor}=="0309", ATTRS{idProduct}=="2002", MODE="0666", GROUP="plugdev"

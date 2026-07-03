@@ -4,8 +4,9 @@ APP_DIR = application
 BOOTLOADER_DIR = bootloader
 HOST_AK_FLESH_DIR = tools/ak-flesh
 HOST_LETA_FLASH_DIR = tools/leta-flash
+HOST_LETA_VIDEO_DIR = tools/leta-video
 
-.PHONY: help all app bootloader ak-flesh leta-flash clean clean-app clean-bootloader clean-host flash-app-dfu flash-app-uart flash-app-stlink flash-bootloader-stlink flash-stlink verify reset debug com
+.PHONY: help all app bootloader ak-flesh leta-flash leta-video install clean clean-app clean-bootloader clean-host flash-app-dfu flash-app-uart flash-app-stlink flash-bootloader-stlink flash-stlink verify reset debug com
 
 all: app bootloader
 
@@ -18,6 +19,8 @@ help:
 	$(Print) "[make flash-app-stlink] write relocated Leta app via ST-Link"
 	$(Print) "[make flash-bootloader-stlink] write USB DFU bootloader via ST-Link"
 	$(Print) "[make leta-flash] build USB DFU host helper"
+	$(Print) "[make leta-video] build USB Video screen streamer"
+	$(Print) "[sudo make install] install USB DFU host helper and udev rules"
 	$(Print) "[make clean] clean firmware and host projects"
 
 app:
@@ -31,6 +34,13 @@ ak-flesh:
 
 leta-flash:
 	$(MAKE) -C $(HOST_LETA_FLASH_DIR)
+
+leta-video:
+	$(MAKE) -C $(HOST_LETA_VIDEO_DIR)
+
+install:
+	$(MAKE) -C $(HOST_LETA_FLASH_DIR) install
+	$(MAKE) -C $(HOST_LETA_VIDEO_DIR) install
 
 flash-app-dfu: app leta-flash
 	$(MAKE) -C $(HOST_LETA_FLASH_DIR) flash FW_PATH=$(CURDIR)/$(APP_DIR)/build_OLED_WATCH/OLED_WATCH.bin
@@ -55,8 +65,9 @@ clean-bootloader:
 	$(MAKE) -C $(BOOTLOADER_DIR) clean
 
 clean-host:
-	$(MAKE) -C $(HOST_AK_FLESH_DIR) clean
+	@if [ -d "$(HOST_AK_FLESH_DIR)" ]; then $(MAKE) -C $(HOST_AK_FLESH_DIR) clean; fi
 	$(MAKE) -C $(HOST_LETA_FLASH_DIR) clean
+	$(MAKE) -C $(HOST_LETA_VIDEO_DIR) clean
 
 verify:
 	$(MAKE) -C $(APP_DIR) verify

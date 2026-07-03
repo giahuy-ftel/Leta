@@ -78,6 +78,44 @@ typedef enum
 #define MAX_NUM_COLUMN 8
 #define MAX_NUM_STAR 30
 
+static uint32_t runner_rng_state = 0xA5A5C3D2UL;
+
+static uint32_t runner_rand(void)
+{
+    uint32_t x = runner_rng_state;
+
+    x ^= x << 13;
+    x ^= x >> 17;
+    x ^= x << 5;
+    runner_rng_state = x;
+    return x;
+}
+
+static uint32_t runner_rand_range(uint32_t limit)
+{
+    if (limit == 0)
+    {
+        return 0;
+    }
+
+    return runner_rand() % limit;
+}
+
+static void runner_rand_seed(void)
+{
+    uint32_t seed = akos_thread_get_tick() ^
+                    ((uint32_t)watch_time_now.second << 16) ^
+                    ((uint32_t)watch_time_now.minute << 8) ^
+                    (uint32_t)watch_time_now.hour;
+
+    if (seed == 0)
+    {
+        seed = 0xA5A5C3D2UL;
+    }
+
+    runner_rng_state ^= seed;
+}
+
 class column
 {
 private:
@@ -100,9 +138,9 @@ public:
 
     void init()
     {
-        x = (rand() % (SCR_WIDTH * 4)) - (SCR_WIDTH * 3 / 2) ;
+        x = (int16_t)runner_rand_range(SCR_WIDTH * 4) - (SCR_WIDTH * 3 / 2);
         w = MAX_COLUMN_WIDTH;
-        depth = (rand() % (MAX_DEPTH / 2)) + MAX_DEPTH / 2;
+        depth = (float)(runner_rand_range(MAX_DEPTH / 2) + MAX_DEPTH / 2);
     }
     void deinit()
     {
@@ -141,9 +179,9 @@ public:
 
     void init()
     {
-        x = (rand() % (SCR_WIDTH * 3/4)) + SCR_WIDTH / 4;
-        h = (rand() % MAX_STAR_HIGH);
-        depth = rand() % MAX_DEPTH;
+        x = (int16_t)runner_rand_range(SCR_WIDTH * 3 / 4) + SCR_WIDTH / 4;
+        h = (uint8_t)runner_rand_range(MAX_STAR_HIGH);
+        depth = (float)runner_rand_range(MAX_DEPTH);
     }
     void deinit()
     {
@@ -203,6 +241,7 @@ static void setup(void * p_arg)
     direction = GO_AHEAD;
     
 
+    runner_rand_seed();
     initColumns(true);
     initStars(true);
 
@@ -322,8 +361,8 @@ static void drawColumns(void)
                 game_state = GAME_STATE_OVER;
                 bmp1.clear_state(GUI_STATE_DISABLE);
             }
-            cl->setX((rand() % (SCR_WIDTH * 4)) - (SCR_WIDTH * 3 / 2) );
-            cl->setDepth((rand() % (MAX_DEPTH / 2)) + MAX_DEPTH / 2);
+            cl->setX((int16_t)runner_rand_range(SCR_WIDTH * 4) - (SCR_WIDTH * 3 / 2));
+            cl->setDepth((float)(runner_rand_range(MAX_DEPTH / 2) + MAX_DEPTH / 2));
         }
 
         cl->draw();
@@ -338,8 +377,8 @@ static void drawStars(void)
     {
         if (st->getDepth() <= 0)
         {
-            st->setX((rand() % (SCR_WIDTH * 3/4)) + SCR_WIDTH / 4);
-            st->setDepth((rand() % (MAX_DEPTH / 4)) + MAX_DEPTH / 4);
+            st->setX((int16_t)runner_rand_range(SCR_WIDTH * 3 / 4) + SCR_WIDTH / 4);
+            st->setDepth((float)(runner_rand_range(MAX_DEPTH / 4) + MAX_DEPTH / 4));
         }
         st->draw();
         st++;
